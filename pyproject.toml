@@ -1,0 +1,17 @@
+[project]
+name = "pyhton-framwork-for-the-web"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = [
+    "django==5.2.*",
+    "python-dotenv>=1.2.3",
+]
+
+[project.scripts]
+pyhton-framwork-for-the-web = "pyhton_framwork_for_the_web:main"
+
+[build-system]
+requires = ["uv_build>=0.12.15,<0.13.0"]
+build-backend = "uv_build"
