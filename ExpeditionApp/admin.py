@@ -1,7 +1,24 @@
 
 from django.contrib import admin
+from django.utils import timezone
 from .models import Expedition
 
+class EnretardFilter(admin.SimpleListFilter):
+    title = 'En retard'
+    parameter_name = 'en_retard'
+
+    def lookups(self, request, model_admin):
+        return (
+            ('oui', 'Oui'),
+            ('non', 'Non'),
+        )
+
+    def queryset(self, request, queryset):
+        if self.value() == 'oui':
+            return queryset.filter(date_souhaitee__lt=timezone.now())
+        elif self.value() == 'non':
+            return queryset.filter(date_souhaitee__gte=timezone.now())
+        return queryset
 
 @admin.register(Expedition)
 class ExpeditionAdmin(admin.ModelAdmin):
@@ -14,7 +31,7 @@ class ExpeditionAdmin(admin.ModelAdmin):
         'date_souhaitee',
     )
 
-    list_filter = ('statut', 'ville_depart')
+    list_filter = ('statut', 'ville_depart', EnretardFilter)
 
     search_fields = (
         'reference',
