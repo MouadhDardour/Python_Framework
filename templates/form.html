@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block title %}{{ titre }}{% endblock %}
+{% block content %}
+<p><a href="{{ retour }}">&larr; Annuler</a></p>
+<h2>{{ titre }}</h2>
+<form method="post" novalidate>
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit">Enregistrer</button>
+</form>
+{% endblock %}

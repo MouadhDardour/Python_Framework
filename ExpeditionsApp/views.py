@@ -1,8 +1,30 @@
 from django.contrib import messages
 from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse
 from django.views.decorators.http import require_POST
 
+from .forms import ExpeditionForm
 from .models import Expedition
+
+
+def ajouter_expedition(request):
+    if request.method == 'POST':
+        form = ExpeditionForm(request.POST)
+        if form.is_valid():
+            expedition = form.save()
+            messages.success(request, f"Expédition {expedition.reference} créée.")
+            return redirect('expeditions:detail', reference=expedition.reference)
+    else:
+        form = ExpeditionForm()
+    return render(
+        request,
+        'form.html',
+        {
+            'form': form,
+            'titre': 'Ajouter une expédition',
+            'retour': reverse('expeditions:liste'),
+        },
+    )
 
 
 def liste_expeditions(request):
@@ -28,6 +50,27 @@ def detail_expedition(request, reference):
         request,
         'expeditions/detail.html',
         {'expedition': expedition, 'offres': offres},
+    )
+
+
+def modifier_expedition(request, reference):
+    expedition = get_object_or_404(Expedition, reference=reference)
+    if request.method == 'POST':
+        form = ExpeditionForm(request.POST, instance=expedition)
+        if form.is_valid():
+            form.save()
+            messages.success(request, f"Expédition {reference} modifiée.")
+            return redirect('expeditions:detail', reference=reference)
+    else:
+        form = ExpeditionForm(instance=expedition)
+    return render(
+        request,
+        'form.html',
+        {
+            'form': form,
+            'titre': f'Modifier l’expédition {reference}',
+            'retour': reverse('expeditions:detail', args=[reference]),
+        },
     )
 
 
