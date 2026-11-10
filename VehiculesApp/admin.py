@@ -23,5 +23,5 @@ class VehiculeAdmin(admin.ModelAdmin):
         ('Suivi', {'fields': ('created_at', 'updated_at')}),
     )
 git add .             
->> git commit -m "lastupdate"
->> git push origin main
+git commit -m "lastupdate"
+git push 
