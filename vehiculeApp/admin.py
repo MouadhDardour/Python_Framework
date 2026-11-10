@@ -1,21 +1,25 @@
 from django.contrib import admin
+
 from .models import Vehicule
 
 
-# Register your models here.
+@admin.register(Vehicule)
 class VehiculeAdmin(admin.ModelAdmin):
-    list_display = ('immatriculation', 'type_vehicule', 'capacite_kg', 'disponible')
+    list_display = ('immatriculation', 'type_vehicule', 'capacite_kg', 'entreprise', 'disponible')
+    list_filter = ('type_vehicule', 'disponible')
+    # search_fields is required here: OffreAdmin uses autocomplete_fields on Vehicule
+    search_fields = ('immatriculation', 'entreprise__raison_sociale')
+    list_editable = ('disponible',)
+    ordering = ('immatriculation',)
+    date_hierarchy = 'created_at'
+    list_per_page = 25
+    list_select_related = ('entreprise',)
+    autocomplete_fields = ('entreprise',)
+    readonly_fields = ('created_at', 'updated_at')
+
     fieldsets = (
-            ('Identification', {
-                'fields': ('immatriculation', 'type_vehicule', 'capacite_kg')
-            }),
-            ('Statut et rattachement', {
-                'fields': ('disponibile', 'entreprise')
-            }),
-            ('Horodatage', {
-                'fields': ('created_at', 'updated_at'),
-                'classes': ('collapse',),
-            }),
-        )
-    
-admin.site.register(Vehicule, VehiculeAdmin)
+        ('Véhicule', {'fields': ('immatriculation', 'type_vehicule', 'capacite_kg')}),
+        ('Affectation', {'fields': ('entreprise', 'disponible')}),
+        ('Suivi', {'fields': ('created_at', 'updated_at')}),
+    )
+
