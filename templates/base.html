@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Accueil{% endblock %} - TransConnect</title>
+    <style>
+        body { font-family: system-ui, Arial, sans-serif; margin: 0; background: #f6f7f9; color: #222; }
+        nav { background: #0b3d6e; padding: 12px 24px; display: flex; gap: 18px; align-items: center; }
+        nav a { color: #fff; text-decoration: none; font-weight: 500; }
+        nav a.brand { font-size: 1.2rem; font-weight: 700; margin-right: 24px; }
+        main { max-width: 960px; margin: 24px auto; padding: 0 16px; }
+        table { border-collapse: collapse; width: 100%; background: #fff; }
+        th, td { border: 1px solid #ddd; padding: 6px 10px; text-align: left; }
+        th { background: #eef1f5; }
+        .messages { list-style: none; padding: 0; }
+        .messages li { padding: 8px 12px; border-radius: 4px; margin-bottom: 6px; background: #e7f1ff; }
+        .messages .success { background: #e3f6e8; }
+        .messages .error { background: #fde8e8; }
+        button.danger { background: #c0392b; color: #fff; border: 0; padding: 7px 14px; border-radius: 4px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <nav>
+        <a class="brand" href="{% url 'expeditions:liste' %}">TransConnect</a>
+        <a href="{% url 'expeditions:liste' %}">Expéditions</a>
+        <a href="{% url 'offres:liste' %}">Offres</a>
+        <a href="{% url 'vehicules:liste' %}">Véhicules</a>
+        <a href="{% url 'entreprises:liste' %}">Entreprises</a>
+        <a href="{% url 'admin:index' %}">Administration</a>
+    </nav>
+    <main>
+        {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                    <li class="{{ message.tags }}">{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>

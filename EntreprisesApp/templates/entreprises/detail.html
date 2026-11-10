@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ entreprise.raison_sociale }}{% endblock %}
+
+{% block content %}
+<p><a href="{% url 'entreprises:liste' %}">&larr; Retour aux entreprises</a></p>
+<h2>{{ entreprise.raison_sociale }}</h2>
+
+<ul>
+<li>Type : {{ entreprise.get_type_entreprise_display }}</li>
+<li>Matricule fiscal : {{ entreprise.matricule_fiscal|upper }}</li>
+<li>Adresse : {{ entreprise.adresse|linebreaksbr }}</li>
+<li>Compte géré par : {{ entreprise.utilisateur.username }} ({{ entreprise.utilisateur.user_id }})</li>
+<li>Inscrite depuis {{ entreprise.created_at|timesince }}</li>
+</ul>
+
+{% if entreprise.type_entreprise == 'transporteur' %}
+<h3>Flotte ({{ vehicules|length }})</h3>
+<ul>
+    {% for vehicule in vehicules %}
+    <li><a href="{% url 'vehicules:detail' vehicule.pk %}">{{ vehicule.immatriculation }}</a>
+        – {{ vehicule.get_type_vehicule_display }}, {{ vehicule.capacite_kg }} kg</li>
+    {% empty %}
+    <li>Aucun véhicule : ce transporteur ne peut pas encore proposer d'offre.</li>
+    {% endfor %}
+</ul>
+
+<h3>Offres proposées ({{ offres|length }})</h3>
+<ul>
+    {% for offre in offres %}
+    <li><a href="{% url 'offres:detail' offre.pk %}">Offre #{{ offre.pk }}</a>
+        sur {{ offre.expedition.reference }} : {{ offre.prix|floatformat:2 }} DT</li>
+    {% empty %}
+    <li>Aucune offre proposée.</li>
+    {% endfor %}
+</ul>
+{% else %}
+<h3>Expéditions publiées ({{ expeditions|length }})</h3>
+<ul>
+    {% for expedition in expeditions %}
+    <li><a href="{% url 'expeditions:detail' expedition.reference %}">{{ expedition.reference }}</a>
+        – {{ expedition.ville_depart }} &rarr; {{ expedition.ville_arrivee }} ({{
+        expedition.get_statut_display }})</li>
+    {% empty %}
+    <li>Aucune expédition publiée.</li>
+    {% endfor %}
+</ul>
+{% endif %}
+{% endblock %}

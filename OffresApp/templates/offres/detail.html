@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block title %}Offre #{{ offre.pk }}{% endblock %}
+
+{% block content %}
+<p><a href="{% url 'offres:liste' %}">&larr; Retour aux offres</a></p>
+<h2>Offre #{{ offre.pk }}</h2>
+
+<ul>
+<li>Expédition : <a href="{% url 'expeditions:detail' offre.expedition.reference %}">{{ offre.expedition.reference }}</a>
+({{ offre.expedition.ville_depart }} &rarr; {{ offre.expedition.ville_arrivee }})</li>
+<li>Transporteur : <a href="{% url 'entreprises:detail' offre.transporteur.pk %}">{{ offre.transporteur.raison_sociale }}</a></li>
+<li>Véhicule : <a href="{% url 'vehicules:detail' offre.vehicule.pk %}">{{ offre.vehicule.immatriculation }}</a></li>
+<li>Prix : {{ offre.prix|floatformat:2 }} DT</li>
+<li>Délai : {{ offre.delai_jours }} jour{{ offre.delai_jours|pluralize }}</li>
+<li>Statut : {{ offre.get_statut_display }}</li>
+<li>Proposée le {{ offre.date_proposition|date:"d/m/Y" }} (il y a {{ offre.date_proposition|timesince }})</li>
+</ul>
+
+{% if offre.statut != 'acceptee' %}
+<form method="post" action="{% url 'offres:supprimer' offre.pk %}"
+      onsubmit="return confirm('Supprimer cette offre ?');">
+{% csrf_token %}
+<p><button type="submit" class="danger">Supprimer l'offre</button></p>
+</form>
+{% endif %}
+{% endblock %}

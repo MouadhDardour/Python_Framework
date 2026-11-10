@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ vehicule.immatriculation }}{% endblock %}
+
+{% block content %}
+<p><a href="{% url 'vehicules:liste' %}">&larr; Retour à la flotte</a></p>
+<h2>Véhicule {{ vehicule.immatriculation|upper }}</h2>
+
+<ul>
+<li>Type : {{ vehicule.get_type_vehicule_display }}</li>
+<li>Capacité : {{ vehicule.capacite_kg }} kg</li>
+<li>Disponible : {{ vehicule.disponible|yesno:"Oui,Non" }}</li>
+<li>Transporteur : <a href="{% url 'entreprises:detail' vehicule.entreprise.pk %}">{{ vehicule.entreprise.raison_sociale }}</a></li>
+<li>Enregistré il y a {{ vehicule.created_at|timesince }}</li>
+</ul>
+
+<h3>{{ offres|length }} offre{{ offres|length|pluralize }} avec ce véhicule</h3>
+<ul>
+{% for offre in offres %}
+    <li>
+        <a href="{% url 'offres:detail' offre.pk %}">Offre #{{ offre.pk }}</a>
+        sur {{ offre.expedition.reference }} : {{ offre.prix|floatformat:2 }} DT ({{ offre.get_statut_display 
+        }})
+    </li>
+{% empty %}
+    <li>Ce véhicule n'a encore été proposé sur aucune offre.</li>
+{% endfor %}
+</ul>
+
+<form method="post" action="{% url 'vehicules:supprimer' vehicule.pk %}"
+      onsubmit="return confirm('Supprimer ce véhicule ?');">
+{% csrf_token %}
+<p><button type="submit" class="danger">Supprimer le véhicule</button></p>
+</form>
+{% endblock %}

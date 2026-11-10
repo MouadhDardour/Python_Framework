@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ expedition.reference }}{% endblock %}
+
+{% block content %}
+<p><a href="{% url 'expeditions:liste' %}">&larr; Retour à la liste</a></p>
+<h2>Expédition {{ expedition.reference }}</h2>
+
+<ul>
+<li>Chargeur : {{ expedition.entreprise.raison_sociale }}</li>
+<li>Trajet : {{ expedition.ville_depart|upper }} &rarr; {{ expedition.ville_arrivee|upper }}</li>
+<li>Poids : {{ expedition.poids_kg|floatformat:0 }} kg</li>
+<li>Date souhaitée : {{ expedition.date_souhaitee|date:"d/m/Y" }}</li>
+<li>Statut : {{ expedition.get_statut_display }}</li>
+<li>Publiée il y a {{ expedition.created_at|timesince }}</li>
+</ul>
+
+<p>{{ expedition.description|default:"Aucune description fournie."|linebreaksbr }}</p>
+
+<h3>{{ offres|length }} offre{{ offres|length|pluralize }} reçue{{ offres|length|pluralize }}</h3>
+<table>
+<thead>
+<tr><th>Transporteur</th><th>Véhicule</th><th>Prix</th><th>Délai</th><th>Statut</th></tr>
+</thead>
+<tbody>
+{% for offre in offres %}
+<tr>
+    <td><a href="{% url 'offres:detail' offre.pk %}">{{ offre.transporteur.raison_sociale }}</a></td>
+    <td>{{ offre.vehicule.immatriculation }}</td>
+    <td>{{ offre.prix|floatformat:2 }} DT</td>
+    <td>{{ offre.delai_jours }} jour{{ offre.delai_jours|pluralize }}</td>
+    <td>{{ offre.get_statut_display }}</td>
+</tr>
+{% empty %}
+<tr><td colspan="5">Aucune offre pour le moment.</td></tr>
+{% endfor %}
+</tbody>
+</table>
+
+{% if expedition.statut == 'publiee' or expedition.statut == 'annulee' %}
+<form method="post" action="{% url 'expeditions:supprimer' expedition.reference %}"
+      onsubmit="return confirm('Supprimer définitivement cette expédition ?');">
+{% csrf_token %}
+<p><button type="submit" class="danger">Supprimer l'expédition</button></p>
+</form>
+{% endif %}
+{% endblock %}
