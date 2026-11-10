@@ -22,6 +22,3 @@ class VehiculeAdmin(admin.ModelAdmin):
         ('Affectation', {'fields': ('entreprise', 'disponible')}),
         ('Suivi', {'fields': ('created_at', 'updated_at')}),
     )
-git add .             
-git commit -m "lastupdate"
-git push 
