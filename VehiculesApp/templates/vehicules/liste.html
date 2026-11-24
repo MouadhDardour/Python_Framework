@@ -3,7 +3,7 @@
 {% block title %}Véhicules{% endblock %}
 
 {% block content %}
-<p><a class="button" href="{% url 'vehicules:ajouter' %}">ADD véhicule</a></p>
+<p><a class="button" href="{% url 'vehicules:ajouter' %}">Ajouter un véhicule</a></p>
 <h2>Flotte de véhicules ({{ vehicules|length }})</h2>
 <table>
   <thead>
@@ -18,11 +18,11 @@
       <td>{{ vehicule.entreprise.raison_sociale }}</td>
       <td>{{ vehicule.disponible|yesno:"Oui,Non" }}</td>
       <td>
-        <a class="button" href="{% url 'vehicules:modifier' vehicule.pk %}">EDIT</a>
+        <a class="button" href="{% url 'vehicules:modifier' vehicule.pk %}">MODIFIER</a>
         <form class="inline-form" method="post" action="{% url 'vehicules:supprimer' vehicule.pk %}"
               onsubmit="return confirm('Supprimer ce véhicule ?');">
           {% csrf_token %}
-          <button class="danger" type="submit">DELETE</button>
+          <button class="danger" type="submit">SUPPRIMER</button>
         </form>
       </td>
     </tr>

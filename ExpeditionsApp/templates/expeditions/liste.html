@@ -3,7 +3,7 @@
 {% block title %}Expéditions disponibles{% endblock %}
 
 {% block content %}
-<p><a class="button" href="{% url 'expeditions:ajouter' %}">ADD expédition</a></p>
+<p><a class="button" href="{% url 'expeditions:ajouter' %}">Ajouter une expédition</a></p>
 <h2>Expéditions publiées ({{ expeditions|length }})</h2>
 <ul>
 {% for expedition in expeditions %}
@@ -17,11 +17,11 @@
         <br>
         <small>{{ expedition.description|default:"Aucune description fournie."|truncatewords:15 }}</small>
         <div>
-            <a class="button" href="{% url 'expeditions:modifier' expedition.reference %}">EDIT</a>
+            <a class="button" href="{% url 'expeditions:modifier' expedition.reference %}">MODIFIER</a>
             <form class="inline-form" method="post" action="{% url 'expeditions:supprimer' expedition.reference %}"
                   onsubmit="return confirm('Supprimer définitivement cette expédition ?');">
                 {% csrf_token %}
-                <button class="danger" type="submit">DELETE</button>
+                <button class="danger" type="submit">SUPPRIMER</button>
             </form>
         </div>
     </li>

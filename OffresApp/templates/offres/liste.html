@@ -3,7 +3,7 @@
 {% block title %}Offres{% endblock %}
 
 {% block content %}
-<p><a class="button" href="{% url 'offres:ajouter' %}">ADD offre</a></p>
+<p><a class="button" href="{% url 'offres:ajouter' %}">Ajouter une offre</a></p>
 <h2>Offres des transporteurs ({{ offres|length }})</h2>
 <table>
 <thead>
@@ -20,11 +20,11 @@
     <td>{{ offre.get_statut_display|upper }}</td>
     <td>
         {% if offre.statut != 'acceptee' %}
-        <a class="button" href="{% url 'offres:modifier' offre.pk %}">EDIT</a>
+        <a class="button" href="{% url 'offres:modifier' offre.pk %}">MODIFIER</a>
         <form class="inline-form" method="post" action="{% url 'offres:supprimer' offre.pk %}"
               onsubmit="return confirm('Supprimer cette offre ?');">
             {% csrf_token %}
-            <button class="danger" type="submit">DELETE</button>
+            <button class="danger" type="submit">SUPPRIMER</button>
         </form>
         {% else %}
         Modification et suppression indisponibles pour une offre acceptée.
